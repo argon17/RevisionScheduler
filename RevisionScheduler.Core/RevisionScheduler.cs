@@ -4,7 +4,7 @@ using Models;
 public class RevisionScheduler
 {
     private readonly int _availableHoursPerDay;
-    private readonly List<Topic> topics = [];
+    private readonly TopicSet topicSet = new TopicSet();
 
     public RevisionScheduler(int availableHoursPerDay)
     {
