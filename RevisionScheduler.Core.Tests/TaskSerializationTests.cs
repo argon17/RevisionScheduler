@@ -6,7 +6,7 @@ public class TaskSerializationTests
 {
     [Theory]
     [InlineData("../../../Expected/SampleTopicSetSerialization/TopicSet.xml")]
-    public void TestSampleTaskFileSerialization(string expectedFilePath)
+    public void TestSampleTopicSetFileSerialization(string expectedFilePath)
     {
         // Arrange
         TopicSet topicSet = new TopicSet();
@@ -19,8 +19,8 @@ public class TaskSerializationTests
         string filePath = "../../../TopicSet.xml";
 
         // Act
-        TaskWriter taskWriter = new TaskWriter(topicSet);
-        taskWriter.Write(filePath);
+        TopicSetWriter taskWriter = new TopicSetWriter();
+        taskWriter.Write(topicSet, filePath);
 
         // Assert
         StreamReader streamReaderExpected = new StreamReader(expectedFilePath);

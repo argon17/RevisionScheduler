@@ -13,4 +13,16 @@ public class TopicSet
     {
         Topics = new List<Topic>();
     }
+
+    public Dictionary<DateTime, Dictionary<Topic, int>> GetSchedule()
+    {
+        Dictionary<DateTime, Dictionary<Topic, int>> schedule = [];
+        foreach(Topic topic in Topics){
+            if(!schedule.ContainsKey(topic.NextRevision)){
+                schedule[topic.NextRevision] = [];
+            }
+            schedule[topic.NextRevision][topic] = topic.RevisionTime;
+        }
+        return schedule;
+    }
 }

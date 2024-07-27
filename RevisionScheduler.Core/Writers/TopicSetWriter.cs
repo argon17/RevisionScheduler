@@ -1,25 +1,23 @@
 using System.Xml.Serialization;
 using RevisionScheduler.Core.Models;
 
-public class TaskWriter
+public class TopicSetWriter : IDbWriter
 {
-    public TopicSet _topicSet;
-    public TaskWriter(TopicSet topicSet)
+    public TopicSetWriter()
     {
-        _topicSet = topicSet; 
     }
 
-    public void Write(FileStream fileStream)
+    public void Write(TopicSet topicSet, FileStream fileStream)
     {
         StreamWriter streamWriter = new StreamWriter(fileStream);
         XmlSerializer serializer = new XmlSerializer(typeof(TopicSet));
-        serializer.Serialize(streamWriter, _topicSet);
+        serializer.Serialize(streamWriter, topicSet);
     }
 
-    public void Write(string filePath)
+    public void Write(TopicSet topicSet, string filePath)
     {
         FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-        Write(fileStream);
+        Write(topicSet, fileStream);
         fileStream.Close();
     }
 }
