@@ -1,3 +1,4 @@
+using System.Globalization;
 using RevisionScheduler.Core.Models;
 
 namespace RevisionScheduler.Core.Tests;
@@ -12,12 +13,17 @@ public class RevisionSchedulerTests
         Topic topic = new(){
             Name = "Cognitive Dissonance",
             Category = "Psychology",
-            RevisionTime = 30
+            RevisionTime = 30,
+            AddedDate = DateTime.ParseExact("2024-07-26", "yyyy-MM-dd", CultureInfo.InvariantCulture)
         };
         IDbReader dbReader = new TopicSetReader();
         IDbWriter dbWriter = new TopicSetWriter();
         string dbPath = "../../../DebugPublic/database.xml";
         if(File.Exists(dbPath)) File.Delete(dbPath);
+        string? dbPathDirName = Path.GetDirectoryName(dbPath);
+        if(dbPathDirName != null){
+            Directory.CreateDirectory(dbPathDirName);
+        }
         RevisionScheduler revisionScheduler = new(dbReader, dbWriter, dbPath);
         List<int> nextRevisionGaps = [];
 

@@ -1,3 +1,4 @@
+using System.Globalization;
 using RevisionScheduler.Core.Models;
 
 namespace RevisionScheduler.Core.Tests;
@@ -14,18 +15,23 @@ public class TaskSerializationTests
             Name = "Cognitive Dissonance",
             Category = "Psychology",
             RevisionTime = 30,
-            AddedDate = DateTime.Parse("2024-07-26")
+            AddedDate = DateTime.ParseExact("2024-07-26", "yyyy-MM-dd", CultureInfo.InvariantCulture)
         };
         topicSet.Topics.Add(topic1);
-        string filePath = "../../../TopicSet.xml";
+        string dbPath = "../../../DebugPublic/database.xml";
+        if(File.Exists(dbPath)) File.Delete(dbPath);
+        string? dbPathDirName = Path.GetDirectoryName(dbPath);
+        if(dbPathDirName != null){
+            Directory.CreateDirectory(dbPathDirName);
+        }
 
         // Act
         TopicSetWriter taskWriter = new TopicSetWriter();
-        taskWriter.Write(topicSet, filePath);
+        taskWriter.Write(topicSet, dbPath);
 
         // Assert
         StreamReader streamReaderExpected = new StreamReader(expectedFilePath);
-        StreamReader streamReaderActual = new StreamReader(filePath);
+        StreamReader streamReaderActual = new StreamReader(dbPath);
         string expectedData = streamReaderExpected.ReadToEnd();
         string actualData = streamReaderActual.ReadToEnd();
         Assert.Equal(expectedData, actualData);
