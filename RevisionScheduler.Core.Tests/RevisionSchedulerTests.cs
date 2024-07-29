@@ -16,7 +16,9 @@ public class RevisionSchedulerTests
         };
         IDbReader dbReader = new TopicSetReader();
         IDbWriter dbWriter = new TopicSetWriter();
-        RevisionScheduler revisionScheduler = new(dbReader, dbWriter, 60);
+        string dbPath = "../../../DebugPublic/database.xml";
+        if(File.Exists(dbPath)) File.Delete(dbPath);
+        RevisionScheduler revisionScheduler = new(dbReader, dbWriter, dbPath);
         List<int> nextRevisionGaps = [];
 
         // Act

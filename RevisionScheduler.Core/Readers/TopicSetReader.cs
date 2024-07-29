@@ -21,6 +21,7 @@ public class TopicSetReader : IDbReader
         StreamReader streamReader = new StreamReader(fileStream);
         XmlSerializer serializer = new XmlSerializer(typeof(TopicSet));
         TopicSet? topicSet = (TopicSet?)serializer.Deserialize(streamReader);
+        fileStream.Close();
         if(topicSet is not null) return topicSet;
         throw new InvalidDataException($"XmlData in Invalid. Failed to read the FileStream.");
     }

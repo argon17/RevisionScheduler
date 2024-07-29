@@ -13,7 +13,8 @@ public class TaskSerializationTests
         Topic topic1 = new Topic(){
             Name = "Cognitive Dissonance",
             Category = "Psychology",
-            RevisionTime = 30
+            RevisionTime = 30,
+            AddedDate = DateTime.Parse("2024-07-26")
         };
         topicSet.Topics.Add(topic1);
         string filePath = "../../../TopicSet.xml";
@@ -27,6 +28,6 @@ public class TaskSerializationTests
         StreamReader streamReaderActual = new StreamReader(filePath);
         string expectedData = streamReaderExpected.ReadToEnd();
         string actualData = streamReaderActual.ReadToEnd();
-        // Assert.Equal(expectedData, actualData);
+        Assert.Equal(expectedData, actualData);
     }
 }

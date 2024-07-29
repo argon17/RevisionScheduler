@@ -25,4 +25,9 @@ public class TopicSet
         }
         return schedule;
     }
+
+    internal int GetNewId(){
+        int maxId = Topics.Count==0?0:Topics.Max(topic => topic.Id);
+        return ++maxId;
+    }
 }

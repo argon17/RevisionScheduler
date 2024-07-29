@@ -1,3 +1,4 @@
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace RevisionScheduler.Core.Models;
@@ -5,6 +6,8 @@ namespace RevisionScheduler.Core.Models;
 [Serializable]
 public class Topic
 {
+    [XmlElement("ID")]
+    public int Id { get; set; }
     [XmlElement("Name")]
     public required string Name { get; init; }
     [XmlElement("Category")]

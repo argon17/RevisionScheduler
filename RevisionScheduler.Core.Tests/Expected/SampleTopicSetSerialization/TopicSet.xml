@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TopicSet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Topic>
+    <ID>0</ID>
     <Name>Cognitive Dissonance</Name>
     <Category>Psychology</Category>
     <RevisionTime>30</RevisionTime>
     <DifficultyLevel>MEDIUM</DifficultyLevel>
     <ImportanceLevel>MEDIUM</ImportanceLevel>
-    <RevisionCount>1</RevisionCount>
-    <LastRevision>2024-07-27T00:00:00+05:30</LastRevision>
-    <NextRevision>2024-07-27T00:00:00+05:30</NextRevision>
+    <RevisionCount>0</RevisionCount>
+    <AddedDate>2024-07-26T00:00:00</AddedDate>
+    <NextRevision>2024-07-29T00:00:00+05:30</NextRevision>
   </Topic>
 </TopicSet>
