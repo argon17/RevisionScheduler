@@ -9,7 +9,21 @@ builder.Services.AddSwaggerGen(c =>
      c.SwaggerDoc("v1", new OpenApiInfo { Title = "RevisionScheduler API", Description = "An application to schedule my next revision of the topics I've studied in order to beat the Forgetting Curve", Version = "v1" });
 });
 
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
+
+// Use CORS
+app.UseCors("AllowAll");
 
 if (app.Environment.IsDevelopment())
 {
@@ -32,8 +46,8 @@ string? dbPath = Environment.GetEnvironmentVariable("DBPATH")
 var revisionScheduler = new RevisionScheduler.Core.RevisionScheduler(topicSetReader, topicSetWriter, dbPath, 60);
 app.MapGet("/", () => "Hello World!");
 app.MapGet("/topics", () => revisionScheduler.GetTopics());
-app.MapGet("/topics/{id}", (int id) => revisionScheduler.GetTopics().SingleOrDefault(topic => topic.Id == id));
+app.MapGet("/topic/{id}", (int id) => revisionScheduler.GetTopics().SingleOrDefault(topic => topic.Id == id));
 app.MapPost("/topics", (Topic topic) => revisionScheduler.AddTopic(topic));
 // app.MapPut("/topics", (topic topic) => /* Update the data store using the `topic` instance */);
-app.MapDelete("/topics/{id}", (int id) => revisionScheduler.DeleteTopic(id));
+app.MapDelete("/topic/{id}", (int id) => revisionScheduler.DeleteTopic(id));
 app.Run();

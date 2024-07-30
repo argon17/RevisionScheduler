@@ -10,6 +10,8 @@ public class Topic
     public int Id { get; set; }
     [XmlElement("Name")]
     public required string Name { get; init; }
+    [XmlElement("Description")]
+    public string Description { get; init; } = "";
     [XmlElement("Category")]
     public required string Category { get; init; }
     [XmlElement("RevisionTime")]

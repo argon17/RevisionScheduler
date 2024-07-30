@@ -10,6 +10,8 @@ public class RevisionScheduler
     private readonly IDbWriter _dbWriter;
     private IDbReader _dbReader;
     private readonly Dictionary<DateTime, Dictionary<Topic, int>> _schedule;
+    private int _pendingChangesCount = 0;
+    private const int PENDING_CHANGES_THRESHOLD = 10;
 
     public RevisionScheduler(IDbReader dbReader, IDbWriter dbWriter, string dbPath, int availableMinsPerDay = 60)
     {
@@ -41,17 +43,24 @@ public class RevisionScheduler
         }
 
         _schedule = topicSet.GetSchedule();
+        // Hook up application exit event
+        // To make sure, we dont' lose any change
+        AppDomain.CurrentDomain.ProcessExit += (sender, e) => UpdateDatabase();
     }
 
-    public void AddTopic(Topic newTopic)
+    public Topic AddTopic(Topic newTopic)
     {
+        ++_pendingChangesCount;
         newTopic.Id = topicSet.GetNewId();
         topicSet.Topics.Add(newTopic);
         ReviseTopic(newTopic);
+        UpdateDatabasePeriodic();
+        return newTopic;
     }
 
     public void ReviseTopic(Topic topic)
     {
+        ++_pendingChangesCount;
         topic.RevisionCount++;
         DateTime nextRevision = topic.AddedDate.AddDays(topic.NextRevisionGap);
         int occupiedHours = 0;
@@ -72,12 +81,19 @@ public class RevisionScheduler
         }
         topic.NextRevision = nextRevision;
         _schedule[nextRevision][topic] = topic.RevisionTime;
-        UpdateDatabase();
+        UpdateDatabasePeriodic();
     }
 
     public void UpdateDatabase()
     {
         _dbWriter.Write(topicSet, _dbPath);
+        _pendingChangesCount = 0;
+    }
+
+    public void UpdateDatabasePeriodic(){
+        if(_pendingChangesCount >= PENDING_CHANGES_THRESHOLD){
+            UpdateDatabase();
+        }
     }
     public Dictionary<Topic, int> GetSchedule(DateTime date)
     {
@@ -93,6 +109,8 @@ public class RevisionScheduler
 
     public void DeleteTopic(int id)
     {
+        ++_pendingChangesCount;
         topicSet.Topics = topicSet.Topics.Where(topic => topic.Id!=id).ToList();
+        UpdateDatabasePeriodic();
     }
 }
